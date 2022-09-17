@@ -1,10 +1,10 @@
 # danxe-lang
 
-Experimental language development
+Experimental language development. Previously, I already had made another virtual machine quite completely -- called `glosso` but this source code
+is removed in github today -- but I want to make another one with the register based machine instead of the stack based one.
 
 # Features
 
-- [ ] Implicit type conversion for arithmetic
 - [ ] Heap allocation (manually managed)
 - [ ] Implement Command IO
 - [ ] Turing Complete (proved by implementing a basic brainfuck interpreter with fixed memory)
@@ -14,12 +14,7 @@ Experimental language development
 
 - [ ] Dynamically sized stack
 - [ ] Array in the stack
-- [ ] glosso language can be compiled into C code properly
-
-# For the stable version
-
-- [ ] Internal garbage collection
-- [ ] Implement a new language whose target is glasm
+- [ ] Dynamic linking with C libraries (for example, running SDL2 in my machine)
 
 # Build
 
@@ -39,12 +34,3 @@ A virtual machine that executes glosso binary (`.dxe` files)
 ## danxe
 
 Assembler for glosso binary. Uses `.dxet` file for input in general
-
-## example usage
-
-```console
-$ cmake -S . -B ./build
-$ make -C ./build
-$ ./build/bin/danxe ../examples/fib.glasm -o fib.dxet
-$ ./build/bin/dxevm fib.dxe
-```
