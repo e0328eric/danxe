@@ -1,3 +1,6 @@
 [submodule "lib/linenoise"]
 	path = lib/linenoise
 	url = https://github.com/antirez/linenoise.git
+[submodule "lib/drapeau"]
+	path = lib/drapeau
+	url = https://github.com/e0328eric/drapeau.git
