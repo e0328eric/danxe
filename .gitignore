@@ -1,0 +1,7 @@
+/build
+/.ccls-cache
+/target
+/**/target
+/.idea
+/cmake-build-debug
+/.cache
