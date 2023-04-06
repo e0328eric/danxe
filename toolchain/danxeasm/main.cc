@@ -2,6 +2,9 @@
 #include <cstring>
 #include <filesystem>
 #include <iostream>
+#include <string_view>
+
+#include <fmt/core.h>
 
 #include "Compiler.hh"
 #include "Error.hh"
@@ -10,17 +13,19 @@
 
 using Err = danxe::danxeasm::DanxeAsmErr;
 
-constexpr const char* USAGE_MSG = "USAGE: danxeasm <input-file> [-o <output-file>]";
-constexpr const char* VERSION = "0.1.0";
+inline constexpr const char* USAGE_MSG = "USAGE: danxeasm <input-file> [-o <output-file>]";
+inline constexpr const char* VERSION = "0.1.0";
 
 const char* findExtension(const char* fileName) {
     const char* output = fileName;
 
-    while (*output != '\0')
+    while (*output != '\0') {
         ++output;
+    }
 
-    while (*output != '.' && output != fileName)
+    while (*output != '.' && output != fileName) {
         --output;
+    }
 
     return output == fileName ? nullptr : output;
 }
@@ -29,12 +34,11 @@ int main(int argc, char* argv[]) {
     Err err = Err::Ok;
     char* sourceStr = nullptr;
     auto currentPath = std::filesystem::current_path();
-    char buffer[100];
 
     // Check whether any argument is given
     if (argc < 2) {
         std::cerr << USAGE_MSG << "\n";
-        std::cerr << "ERROR: no input files" << std::endl;
+        std::cerr << "ERROR: no input files\n";
         return 1;
     }
 
@@ -53,16 +57,13 @@ int main(int argc, char* argv[]) {
     const char* extension = findExtension(inputFilename);
 
     if (extension == nullptr) {
-        std::cerr << "ERROR: invalid input file" << std::endl;
+        std::cerr << "ERROR: invalid input file\n";
         return 1;
     }
 
-    memcpy((void*)buffer, inputFilename, (size_t)(extension - inputFilename));
-    memcpy((void*)(buffer + (extension - inputFilename)), ".gsm", 4);
-    buffer[extension - inputFilename + 4] = '\0';
-
     // Define a default output file name
-    const char* outputFilename = buffer;
+    std::string outputFilename =
+        fmt::format("{}.dxb", std::string_view(inputFilename, extension - inputFilename));
 
     switch (argc) {
         case 2:
@@ -70,13 +71,13 @@ int main(int argc, char* argv[]) {
 
         case 3:
             std::cerr << USAGE_MSG << "\n";
-            std::cerr << "ERROR: specify the output file name" << std::endl;
+            std::cerr << "ERROR: specify the output file name\n";
             return 1;
 
         case 4:
             if (argv[3][0] == '-') {
                 std::cerr << USAGE_MSG << "\n";
-                std::cerr << "ERROR: specify the output file name" << std::endl;
+                std::cerr << "ERROR: specify the output file name\n";
                 return 1;
             }
             outputFilename = argv[3];
@@ -84,7 +85,7 @@ int main(int argc, char* argv[]) {
 
         default:
             std::cerr << USAGE_MSG << "\n";
-            std::cerr << "ERROR: too many input found" << std::endl;
+            std::cerr << "ERROR: too many input found\n";
             return 1;
     }
 
@@ -96,7 +97,7 @@ int main(int argc, char* argv[]) {
     char* output;
     danxe::danxeasm::Preprocessor prep{inputFilename, sourceStr};
     if ((err = prep.preprocess(&output)) != Err::Ok) {
-        std::cerr << err << " while preprocessing the code" << std::endl;
+        std::cerr << err << " while preprocessing the code\n";
         return 1;
     }
 
@@ -105,7 +106,7 @@ int main(int argc, char* argv[]) {
     // Main part
     danxe::danxeasm::Compiler compiler{output};
     if ((err = compiler.compile(outputFilename)) != Err::Ok) {
-        std::cerr << err << " at line " << compiler.getCodeLine() << std::endl;
+        std::cerr << err << " at line " << compiler.getCodeLine() << '\n';
         return 1;
     }
 

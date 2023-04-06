@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <cstdio>
+#include <string>
 #include <string_view>
 #include <vector>
 
@@ -34,7 +35,7 @@ class Compiler {
     Compiler& operator=(const Compiler&) = delete;
     Compiler& operator=(Compiler&&) = delete;
 
-    DanxeAsmErr compile(const char* outputFilename);
+    DanxeAsmErr compile(const std::string& outputFilename);
 
     size_t getCodeLine() const;
 

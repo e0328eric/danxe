@@ -15,6 +15,11 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # Include FetchContent
 include(FetchContent)
+FetchContent_Declare(
+    fmt
+    GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+    GIT_TAG 9.1.0)
+FetchContent_MakeAvailable(fmt)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
     set(COMPILER_FLAGS -O3 -Wall -Wextra -Wpedantic)

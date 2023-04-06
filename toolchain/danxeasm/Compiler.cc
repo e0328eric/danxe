@@ -61,7 +61,7 @@ Compiler::~Compiler() {
     delete[] mSource;
 }
 
-Err Compiler::compile(const char* outputFilename) {
+Err Compiler::compile(const std::string& outputFilename) {
 #define WRITE_FILE(_ptr, _nitems)                                                   \
     do {                                                                            \
         if ((fwrite(_ptr, 1, _nitems, outputFile)) < _nitems) {                     \
@@ -78,7 +78,7 @@ Err Compiler::compile(const char* outputFilename) {
 
     FILE* outputFile = nullptr;
 
-    if ((outputFile = fopen(outputFilename, "wb")) == nullptr) {
+    if ((outputFile = fopen(outputFilename.c_str(), "wb")) == nullptr) {
         std::cerr << "ERROR: cannot open the file " << outputFilename << "\n\t";
         std::cerr << strerror(errno) << std::endl;
         return Err::WriteFailedErr;
