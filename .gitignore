@@ -1,1 +1,5 @@
-/target
+/.vscode
+/.cache
+/.ccls
+/subprojects/fmt-9.1.0
+/subprojects/packagecache
