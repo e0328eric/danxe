@@ -1,9 +1,6 @@
-// Copyright (c) 2023 Sungbae Jeong
-//
-// This software is released under the MIT License.
-// https://opensource.org/licenses/MIT
-
 use std::ops::{Add, Div, Mul, Not, Sub};
+
+use crate::from_to::to::ToBytes;
 
 #[repr(u8)]
 #[derive(Debug, Clone, PartialEq)]
@@ -17,6 +14,8 @@ pub enum Value {
     String(String),
     Array(Vec<Value>),
 }
+
+// Operator Overloadings
 
 impl Add for Value {
     type Output = Self;
@@ -81,6 +80,47 @@ impl Not for Value {
             Self::Null => Self::Bool(true),
             Self::Bool(b) => Self::Bool(!b),
             _ => Self::Null,
+        }
+    }
+}
+
+// FromBytes and ToBytes implementation
+
+impl ToBytes for Value {
+    fn to_bytes(&self) -> Vec<u8> {
+        match self {
+            Self::Null => vec![0],
+            Self::Bool(b) => vec![1, (*b as u8)],
+            Self::Int(n) => {
+                let mut output = vec![2];
+                output.append(&mut n.to_bytes());
+                output
+            }
+            Self::Uint(n) => {
+                let mut output = vec![3];
+                output.append(&mut n.to_bytes());
+                output
+            }
+            Self::Float(n) => {
+                let mut output = vec![4];
+                output.append(&mut n.to_bytes());
+                output
+            }
+            Self::Char(chr) => {
+                let mut output = vec![5];
+                output.append(&mut chr.to_bytes());
+                output
+            }
+            Self::String(s) => {
+                let mut output = vec![6];
+                output.append(&mut s.to_bytes());
+                output
+            }
+            Self::Array(arr) => {
+                let mut output = vec![7];
+                output.append(&mut arr.to_bytes());
+                output
+            }
         }
     }
 }

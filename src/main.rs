@@ -1,10 +1,19 @@
-// Copyright (c) 2023 Sungbae Jeong
-//
-// This software is released under the MIT License.
-// https://opensource.org/licenses/MIT
+mod command;
 
-mod vm;
+use danxe::from_to::to::ToBytes;
+use danxe::vm::value::Value;
 
 fn main() {
-    println!("Hello, world!");
+    let values = Value::Array(vec![
+        Value::Null,
+        Value::Array(vec![
+            Value::String("麻婆豆腐大块的，请多放点花椒。".to_string()),
+            Value::Float(std::f64::consts::PI),
+            Value::Int(123),
+            Value::Char('강'),
+        ]),
+        Value::Bool(true),
+    ]);
+
+    println!("{:?}", values.to_bytes());
 }
