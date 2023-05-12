@@ -129,7 +129,6 @@ where
 
         let mut output = Vec::with_capacity(10);
         for subbytes in bytes[1..array_end_idx].split(|b| *b == BYTES_SEPARATOR) {
-            println!("{subbytes:x?}");
             let (val, rest) = T::from_bytes(subbytes)?;
             if !rest.is_empty() {
                 bail!(danxe_err!(FromBytesErr::FailedToMakeVector));
