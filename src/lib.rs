@@ -1,7 +1,5 @@
-// Copyright (c) 2023 Sungbae Jeong
-//
-// This software is released under the MIT License.
-// https://opensource.org/licenses/MIT
+#[macro_use]
+pub mod error;
 
 pub mod assembler;
 pub mod from_to;

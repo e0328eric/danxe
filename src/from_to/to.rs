@@ -3,9 +3,7 @@ use std::io::{self, BufWriter, Write};
 use std::mem::size_of;
 use std::path::Path;
 
-const BYTES_START: u8 = 0xea;
-const BYTES_SEPARATOR: u8 = 0xeb;
-const BYTES_END: u8 = 0xec;
+use crate::from_to::{BYTES_END, BYTES_SEPARATOR, BYTES_START, STRING_END, STRING_START};
 
 pub trait ToBytes {
     fn to_bytes(&self) -> Vec<u8>;
@@ -20,7 +18,7 @@ pub trait ToBytes {
     }
 }
 
-// Implementation for primitive types
+// Implementations for primitive types
 
 impl ToBytes for bool {
     fn to_bytes(&self) -> Vec<u8> {
@@ -54,7 +52,12 @@ impl ToBytes for char {
 
 impl ToBytes for String {
     fn to_bytes(&self) -> Vec<u8> {
-        Vec::from(self.as_bytes())
+        let mut output = Vec::with_capacity(self.len() + 2);
+        output.push(STRING_START);
+        output.append(&mut Vec::from(self.as_bytes()));
+        output.push(STRING_END);
+
+        output
     }
 }
 
