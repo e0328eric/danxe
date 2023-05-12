@@ -1,12 +1,12 @@
 pub mod from;
 pub mod to;
 
-pub(in crate::from_to) const BYTES_START: u8 = 0xea;
-pub(in crate::from_to) const BYTES_SEPARATOR: u8 = 0xeb;
-pub(in crate::from_to) const BYTES_END: u8 = 0xec;
+pub(in crate::from_to) const BYTES_START: u8 = 0xfa;
+pub(in crate::from_to) const BYTES_SEPARATOR: u8 = 0xfb;
+pub(in crate::from_to) const BYTES_END: u8 = 0xfc;
 
-pub(in crate::from_to) const STRING_START: u8 = 0xfa;
-pub(in crate::from_to) const STRING_END: u8 = 0xfc;
+pub(in crate::from_to) const STRING_START: u8 = 0xfd;
+pub(in crate::from_to) const STRING_END: u8 = 0xfe;
 
 // A marker trait which indicates whether a type has
 // both FromBytes and ToBytes implementations
@@ -143,6 +143,25 @@ mod tests {
             assert!(rest.is_empty());
             assert_eq!(s, got);
         }
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_from_to_for_vector() -> error::Result<()> {
+        let mut rng = thread_rng();
+        let mut array = Vec::<String>::with_capacity(101);
+
+        let mut len_rng = thread_rng();
+        for _ in 0..101 {
+            array.push(Standard.sample_string(&mut rng, len_rng.gen_range(1..101)));
+        }
+
+        let bytes = array.to_bytes();
+        let (got, rest) = Vec::<String>::from_bytes(&bytes)?;
+
+        assert!(rest.is_empty());
+        assert_eq!(array, got);
 
         Ok(())
     }
